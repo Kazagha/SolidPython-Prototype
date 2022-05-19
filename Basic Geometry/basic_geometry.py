@@ -3,15 +3,17 @@ import sys
 
 from solid import scad_render_to_file
 from solid.objects import cube, cylinder, difference, translate, union
-from solid.utils import right
+from solid.utils import right,left,up,down
 
 SEGMENTS = 48
 
 def basic_geometry():
 
-    right_piece = right(15)(cube([100, 50, 33], center=True))
-    cyl = cylinder(r=75, h=50, center=True) - cylinder(r=65, h=50, center=True)
+    right_piece = right(15)(cube([100, 50, 40], center=True))
+    test = up(30)(cube([20,20,20], center=True))
+    cyl = cylinder(r=75, h=50, center=True) - cylinder(r=65, h=51, center=True)
     right_piece += right(100)(cyl)
+    right_piece += (test)
 
     return right_piece;
 
