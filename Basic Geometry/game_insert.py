@@ -9,19 +9,25 @@ SEGMENTS = 48
 
 def game_insert():
 
-    length, width, height = 100,150,50
+    length, width, height = 150,100,50
     # Wall Thickness
-    wall = 5
+    wall = 3
+    wells = 2
     double_wall = wall*2
 
-    box = (cube([length,width,height]))
-    inner_box = (cube([length-double_wall,width-double_wall,height]))
-    # Offset the Inner Box
-    inner_box = translate([wall,wall,wall])(inner_box)
-    insert = roundbox([length-double_wall,width-double_wall,height],2)
-    # Offset the insert
-    insert = translate([wall,wall,wall])(insert)
-    return box - insert
+    box = roundbox([length,width,height],2)
+    #insert = roundbox([length-double_wall,width-double_wall,height],2)
+    well_size = [(length - (wall * (wells + 1))) / wells,width-double_wall,height]
+
+    for i in range(wells):
+        # Create the insert
+        insert = roundbox(well_size,2)
+        # Offset the insert
+        insert = translate([wall * (i + 1) + well_size[0] * i,wall,wall])(insert)
+        # Add the well into the box
+        box -= insert
+
+    return box
 
 def roundbox(size, radius):
     """"box with rounded edges."""
