@@ -2,7 +2,7 @@
 import sys
 
 from solid import scad_render_to_file
-from solid.objects import cube, cylinder, difference, translate, union
+from solid.objects import cube, cylinder, difference, translate, union, hull, rotate
 from solid.utils import right,left,up,down,minkowski
 
 SEGMENTS = 48
@@ -12,12 +12,12 @@ def game_insert():
     length, width, height = 150,100,50
     # Wall Thickness
     wall = 3
-    wells = 2
+    wells = 3
     double_wall = wall*2
 
     box = roundbox([length,width,height],2)
     #insert = roundbox([length-double_wall,width-double_wall,height],2)
-    well_size = [(length - (wall * (wells + 1))) / wells,width-double_wall,height]
+    well_size = [(length - (wall * (wells + 1))) / wells, width-double_wall, height]
 
     for i in range(wells):
         # Create the insert
