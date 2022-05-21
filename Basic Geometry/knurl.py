@@ -4,35 +4,32 @@ import sys
 from solid import scad_render_to_file
 from solid.objects import cube, cylinder, difference, translate, union, hull, rotate
 from solid.utils import right,left,up,down,minkowski
-from math import sin,cos
+from math import sin,cos,floor
 
 SEGMENTS = 48
 
 def knurl():
     radius = 75
-    diameter = radius * 2
     height = 10
     knurl_segments = 48
+    knurl_count = int(floor(knurl_segments / 2))
 
     box_lid = (cylinder(r=radius, h=height))
 
     # Circumference of the circle divided by number of segments
     # with a 1.5 multiplier to make the the knurl larger
     knurl_diameter = (3.14 * radius * 2) / knurl_segments * 1.5
-    print('Knurl: {}'.format(knurl_diameter))
+    # Divide the circle evenly into segments, skipping every second segment
     knurl_step = 360 / knurl_segments * 2
-    knurl_number = knurl_segments / 2
 
-    for i in range(3):
-        print('Segments')
+    for i in range(knurl_count):
         knurl = (cylinder(d=knurl_diameter, h=height))
-
-        dx = (diameter / 2 - 1) * sin(i + knurl_step / 3)
-        dy = (diameter / 2 - 1) * cos(i + knurl_step / 3)
-        #knurl = (translate([radius - (knurl_diameter / 3), 0, 0]))(knurl)
-        #knurl = (translate([radius - (knurl_diameter / 3), 0, 0]))(knurl)
-        knurl = (translate([dx,dy,0]))(knurl)
-        box_lid += box_lid + knurl
+        # Push the knurl out 1 radius distance
+        # Reduced slightly so the knurl is embedded
+        knurl = (translate([radius - (knurl_diameter / 4) ,0,0]))(knurl)
+        # Rotate the knurl into position around the circumference
+        knurl = (rotate([0,0,i * knurl_step]))(knurl)
+        box_lid += knurl
 
     return box_lid
 
