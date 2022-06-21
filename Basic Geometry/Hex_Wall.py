@@ -25,8 +25,7 @@ def Hex_Wall():
     barrier_thickness = 10
 
     # Calculated Variables
-    hex_radius = wall_height / 3
-    hex_count = floor(wall_length / hex_radius)
+    hex_radius = wall_height / 4
     segment = 360 / 6
     # Calculate the length of the flat side (along the bottom of the hexagon)
     # a^2 = b^2 + c^2 - 2bc cosA
@@ -38,6 +37,7 @@ def Hex_Wall():
     # Calculate the X offset
     x_offset = hex_radius * 2 + side_length
     x_offset_up_row = (side_length / 2 + hex_radius)
+    hex_count = floor(wall_length / x_offset) + 1
 
     # Create a single hex
     hex = Create_Hex(radius=hex_radius, wall_height=barrier_thickness, hex_wall=hex_wall)
@@ -51,8 +51,13 @@ def Hex_Wall():
     hex_barrier += translate([x_offset_up_row, distance_to_side, 0])(hex_row)
     hex_barrier += translate([0, distance_to_side * 2, 0])(hex_row)
     hex_barrier += translate([x_offset_up_row, distance_to_side * 3, 0])(hex_row)
+    hex_barrier += translate([0, distance_to_side * 4, 0])(hex_row)
+    hex_barrier += translate([x_offset_up_row, distance_to_side * 5, 0])(hex_row)
 
-    print(f'{hex_radius} / {wall_length}')
+    wall_template = (cube([wall_length, wall_height, wall_height + 1]))
+    hex_barrier = hex_barrier * wall_template
+
+    print(f'{hex_radius * 2} / {wall_height}')
     return hex_barrier
 
 if __name__ == '__main__':
